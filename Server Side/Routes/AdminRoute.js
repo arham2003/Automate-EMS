@@ -23,44 +23,59 @@ router.options('/adminlogin', (req, res) => {
   res.sendStatus(200);
 });
 
+
 router.post("/adminlogin", (req, res) => {
-    const { email, password } = req.body;
+  const { email, password } = req.body;
+
+  // Validate input
+  if (!email || !password) {
+    return res.status(400).json({ loginStatus: false, Error: "Email and password are required" });
+  }
+
+  const sql = "SELECT * FROM admin WHERE email = ? AND password = ?";
   
-    // Validate input
-    if (!email || !password) {
-      return res.status(400).json({ loginStatus: false, Error: "Email and password are required" });
+  con.query(sql, [email, password], (err, result) => {
+    if (err) {
+      return res.status(500).json({ loginStatus: false, Error: "Database query error" });
     }
-  
-    const sql = "SELECT * FROM admin WHERE email = ? AND password = ?";
-    
-    con.query(sql, [email, password], (err, result) => {
-      if (err) {
-        return res.status(500).json({ loginStatus: false, Error: "Database query error" });
-      }
-  
-      if (result.length > 0) {
-        const admin = result[0];
-  
-        // Generate JWT token
-        const token = jwt.sign(
-          { role: "admin", email: admin.email, id: admin.id },
-          "jwt_secret_key",
-          { expiresIn: "1d" } // Token valid for 1 day
-        );
-  
-        // Set the token as an HTTP-only cookie
-        res.cookie("token", token, {
-          httpOnly: true,
-          secure: true, // Set to true in production (requires HTTPS)
-          sameSite: "Strict", // Ensures cookie is sent in first-party context only
-        });
-  
-        return res.json({ loginStatus: true, message: "Login successful" });
-      } else {
-        return res.status(401).json({ loginStatus: false, Error: "Invalid email or password" });
-      }
-    });
+
+    if (result.length > 0) {
+      const admin = result[0];
+
+      // Generate JWT token
+      const token = jwt.sign(
+        { role: "admin", email: admin.email, id: admin.id },
+        "jwt_secret_key",
+        { expiresIn: "1d" } // Token valid for 1 day
+      );
+
+      // Set the token as an HTTP-only cookie
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: true, // Set to true in production (requires HTTPS)
+        sameSite: "Strict", // Ensures cookie is sent in first-party context only
+      });
+
+      return res.json({ loginStatus: true, message: "Login successful" });
+    } else {
+      return res.status(401).json({ loginStatus: false, Error: "Invalid email or password" });
+    }
   });
+});
+
+router.get("/verify", (req, res) => {
+  const token = req.cookies.token;
+  if (token) {
+    jwt.verify(token, "jwt_secret_key", (err, decoded) => {
+      if (err) {
+        return res.json({ Status: false, Error: "Wrong Token" });
+      }
+      return res.json({ Status: true, role: decoded.role, id: decoded.id });
+    });
+  } else {
+    return res.json({ Status: false, Error: "Not authenticated" });
+  }
+});
 
 router.get('/departments', (req, res) => {
     const sql = "SELECT * FROM departments";
