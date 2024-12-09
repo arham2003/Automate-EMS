@@ -21,9 +21,8 @@ const app = express()
 
 const allowedOrigins = [
     "http://localhost:3000", // Local development
-    "https://automate-ems.vercel.app/", // Deployed frontend
-    "https://employee-ms-with-react.vercel.app/dashboard",
-    "https://employee-ms-with-react-arsf.vercel.app/",
+    "https://automate-ems.vercel.app", // Deployed frontend
+    "https://employee-ms-with-react-arsf.vercel.app",
   ];
   
   app.use(cors({
