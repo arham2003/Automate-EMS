@@ -33,9 +33,10 @@ const allowedOrigins = [
         callback(new Error("Not allowed by CORS"));
       }
     },
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: 'Content-Type,Authorization',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
+    preflightContinue: false // To prevent CORS preflight errors
   }));
   
 app.use(express.json())
