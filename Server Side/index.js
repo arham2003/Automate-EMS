@@ -21,9 +21,7 @@ const app = express()
 
 const allowedOrigins = [
   "https://automate-ems.vercel.app", // Frontend origin
-  "https://employee-ms-with-react-arsf.vercel.app/",
   "https://automate-ems.vercel.app/adminlogin",
-  "https://employee-ms-with-react-arsf.vercel.app/auth/adminlogin" // Frontend origin for the admin panel
 ];
 
 app.use(cors({
