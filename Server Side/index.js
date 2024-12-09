@@ -20,24 +20,22 @@ const app = express()
 
 
 const allowedOrigins = [
-    "http://localhost:3000", // Local development
-    "https://automate-ems.vercel.app", // Deployed frontend
-    "https://employee-ms-with-react-arsf.vercel.app",
-  ];
-  
-  app.use(cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
-    preflightContinue: false // To prevent CORS preflight errors
-  }));
+  "https://automate-ems.vercel.app", // Frontend origin
+  "https://employee-ms-with-react-arsf.vercel.app" // Frontend origin for the admin panel
+];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Include OPTIONS for preflight request
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true, // Allows credentials to be sent with the request
+}));
   
 app.use(express.json())
 // app.use(bodyParser.json());

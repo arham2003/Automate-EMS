@@ -9,6 +9,20 @@ import 'dotenv/config';
 
 const router = express.Router();
 
+const allowedOrigins = [
+  "https://automate-ems.vercel.app", // Frontend origin
+  "https://employee-ms-with-react-arsf.vercel.app" // Frontend origin for the admin panel
+];
+
+// Preflight request handler
+router.options('/adminlogin', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', 'https://automate-ems.vercel.app'); // Specify your frontend URL
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.sendStatus(200);
+});
+
 router.post("/adminlogin", (req, res) => {
     const { email, password } = req.body;
   
