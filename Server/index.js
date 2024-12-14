@@ -19,24 +19,13 @@ const app = express()
 
 
 
-const allowedOrigins = [
-  "https://automate-ems.vercel.app", // Frontend origin
-  "https://automate-ems.vercel.app/adminlogin",
-  "https://automate-ems-fc5z.vercel.app"
-];
-
 app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
+  origin: 'https://automate-ems.vercel.app',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Include OPTIONS for preflight request
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true, // Allows credentials to be sent with the request
 }));
+app.options('*', cors());
   
 app.use(express.json())
 // app.use(bodyParser.json());

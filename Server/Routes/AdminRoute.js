@@ -11,7 +11,6 @@ const router = express.Router();
 
 const allowedOrigins = [
   "https://automate-ems.vercel.app", // Frontend origin
-  "https://employee-ms-with-react-arsf.vercel.app" // Frontend origin for the admin panel
 ];
 
 // Preflight request handler
