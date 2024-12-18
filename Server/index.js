@@ -26,6 +26,7 @@ app.use(cors({
   credentials: true, // Allows credentials to be sent with the request
 }));
 app.options('*', cors());
+app.options("/auth/adminlogin", cors());
   
 app.use(express.json())
 // app.use(bodyParser.json());
